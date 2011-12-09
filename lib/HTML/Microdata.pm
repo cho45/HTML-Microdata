@@ -4,8 +4,9 @@ use strict;
 use warnings;
 
 use HTML::TreeBuilder::LibXML;
-use Scalar::Util qw(refaddr);
 use Hash::MultiValue;
+use Scalar::Util qw(refaddr);
+use JSON;
 
 our $VERSION = '0.01';
 
@@ -25,9 +26,14 @@ sub extract {
 
 sub as_json {
 	my ($self) = @_;
-	+{
+	encode_json +{
 		items => $self->{items},
-	}
+	};
+}
+
+sub items {
+	my ($self) = @_;
+	$self->{items};
 }
 
 sub _parse {
@@ -129,16 +135,26 @@ HTML::Microdata -
 
   use HTML::Microdata;
 
+  my $microdata = HTML::Microdata->extract(<<EOF);
+  my $json = $microdata->as_json;
+
+  use Data::Dumper;
+  warn Dumper $microdata->items;
+
 
 =head1 DESCRIPTION
 
 HTML::Microdata is 
+
+HTML::HTML5::Microdata::Parser has too many dependency but I want more small dependency and simple output.
 
 =head1 AUTHOR
 
 cho45 E<lt>cho45@lowreal.netE<gt>
 
 =head1 SEE ALSO
+
+L<HTML::HTML5::Microdata::Parser|HTML::HTML5::Microdata::Parser>
 
 =head1 LICENSE
 

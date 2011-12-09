@@ -15,7 +15,7 @@ run {
 	my ($block) = @_;
 	my $microdata = HTML::Microdata->extract($block->input);
 	my $expected  = decode_json $block->expected;
-	eq_or_diff $microdata->as_json, $expected, $block->name;
+	eq_or_diff decode_json($microdata->as_json), $expected, $block->name;
 };
 
 __END__
@@ -155,6 +155,35 @@ __END__
 						}
 					}
 				]
+			}
+		}
+	]
+}
+
+
+=== typed
+--- input
+<html>
+<body>
+
+
+<section itemscope itemtype="http://example.org/animals#cat">
+	<h1 itemprop="name">Hedral</h1>
+	<p itemprop="desc">description</p>
+	<img itemprop="img" src="hedral.jpeg" alt="" title="Hedral, age 18 months">
+</section>
+
+</body>
+</html>
+--- expected
+{
+	"items" : [
+		{
+			"type" : "http://example.org/animals#cat",
+			"properties" : {
+				"name" : [ "Hedral" ],
+				"desc" : [ "description" ],
+				"img"  : [ "hedral.jpeg" ]
 			}
 		}
 	]
