@@ -123,3 +123,41 @@ __END__
 }
 
 
+=== itemref
+--- input
+<html>
+<body>
+
+<div itemscope id="amanda" itemref="a b"></div>
+
+<p id="a">Name: <span itemprop="name">Amanda</span></p>
+
+<div id="b" itemprop="band" itemscope itemref="c"></div>
+
+<div id="c">
+	<p>Band: <span itemprop="name">Jazz Band</span></p>
+	<p>Size: <span itemprop="size">12</span> players</p>
+</div>
+
+</body>
+</html>
+--- expected
+{
+	"items" : [
+		{
+			"properties" : {
+				"name" : [ "Amanda" ],
+				"band" : [
+					{
+						"properties" : {
+							"name" : [ "Jazz Band" ],
+							"size" : [ "12" ]
+						}
+					}
+				]
+			}
+		}
+	]
+}
+
+

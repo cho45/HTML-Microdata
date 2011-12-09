@@ -37,6 +37,7 @@ sub _parse {
 	my $tree = HTML::TreeBuilder::LibXML->new_from_content($content);
 	my $scopes = $tree->findnodes('//*[@itemscope]');
 	my $number = 0;
+
 	for my $scope (@$scopes) {
 		my $type = $scope->attr('itemtype');
 		my $id   = $scope->attr('itemid');
@@ -45,29 +46,33 @@ sub _parse {
 			$scope->id($number++);
 		}
 
-		if (my $refs = $scope->attr('itemref')) {
-			my $ids = [ split /\s+/, $refs ];
-			for my $id (@$ids) {
-				my $props = $tree->findnodes('//*[\@id="' . $id . '"]//*[\@itemprop]');
-				for my $prop (@$props) {
-					my $name = $prop->attr('itemprop');
-					my $value = $self->extract_value($prop, items => $items);
-					$items->{ $scope->id }->add($name => $value);
-				}
-			}
-		}
-
-		$items->{ $scope->id } = {
+		my $item = {
 			($id   ? (id   => $id)   : ()),
 			($type ? (type => $type) : ()),
 			properties => Hash::MultiValue->new,
 		};
 
+		$items->{ $scope->id } = $item;
+
 		unless ($scope->attr('itemprop')) {
 			# This is top level item
-			push $self->{items}, $items->{ $scope->id };
+			push $self->{items}, $item;
 		}
+	}
 
+	for my $scope (@$scopes) {
+		if (my $refs = $scope->attr('itemref')) {
+			my $ids = [ split /\s+/, $refs ];
+			for my $id (@$ids) {
+				my $props = $tree->findnodes('//*[@id="' . $id . '"]/descendant-or-self::*[@itemprop]');
+				for my $prop (@$props) {
+					my $name = $prop->attr('itemprop');
+					my $value = $self->extract_value($prop, items => $items);
+					$items->{ $scope->id }->{properties}->add($name => $value);
+					$prop->delete;
+				}
+			}
+		}
 	}
 
 	my $props = $tree->findnodes('//*[@itemprop]');
