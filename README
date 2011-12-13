@@ -4,17 +4,28 @@ NAME
 SYNOPSIS
       use HTML::Microdata;
 
-      my $microdata = HTML::Microdata->extract(<<EOF);
+      my $microdata = HTML::Microdata->extract(<<EOF, base => 'http://example.com/');
+      ...
+      EOF
       my $json = $microdata->as_json;
 
       use Data::Dumper;
-      warn Dumper $microdata->items;
+      warn Dumper $microdata->items; # returns top level items
 
 DESCRIPTION
     HTML::Microdata is extractor of microdata from HTML to JSON etc.
 
-    HTML::HTML5::Microdata::Parser has too many dependency but I want more
-    small dependency and simple output.
+    Implementation of
+    http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.ht
+    ml#microdata .
+
+TODO
+    itemref implementation has not been completed.
+
+WHY
+    There already is HTML::HTML5::Microdata::Parser in CPAN. But it has very
+    heavy dependency and I can't install it. And more, package name should
+    not include "HTML5" because HTML5 is just HTML now.
 
 AUTHOR
     cho45 <cho45@lowreal.net>
