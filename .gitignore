@@ -12,3 +12,5 @@ cover_db
 startup.sh
 MYMETA.yml
 MYMETA.json
+Debian_CPANTS.txt*
+*.bak

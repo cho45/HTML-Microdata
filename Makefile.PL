@@ -21,7 +21,11 @@ use inc::Module::Install;
 name 'HTML-Microdata';
 all_from 'lib/HTML/Microdata.pm';
 
-requires 'Exporter::Lite';
+requires 'Hash::MultiValue';
+requires 'Scalar::Util';
+requires 'JSON';
+requires 'URI';
+requires 'HTML::TreeBuilder::LibXML';
 
 build_requires 'Test::More';
 

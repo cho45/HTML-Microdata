@@ -11,9 +11,17 @@ use JSON::XS;
 
 plan tests => 1 * blocks;
 
+filters {
+	input    => [qw/chomp/],
+	expected => [qw/chomp/],
+	base     => [qw/chomp/],
+};
+
 run {
 	my ($block) = @_;
-	my $microdata = HTML::Microdata->extract($block->input);
+	my $microdata = HTML::Microdata->extract($block->input,
+		base => $block->base || undef
+	);
 	my $expected  = decode_json $block->expected;
 	eq_or_diff decode_json($microdata->as_json), $expected, $block->name;
 };
@@ -189,4 +197,75 @@ __END__
 	]
 }
 
+=== url
+--- base
+http://example.com/
+--- input
+<html>
+<body>
 
+
+<section itemscope>
+	<a itemprop="empty" />
+	<a itemprop="a" href="foo.html"/>
+	<area itemprop="area" href="foo.html"/>
+	<audio itemprop="audio" src="foo.ogg"/>
+	<embed itemprop="embed" src="foo.dat"/>
+	<iframe itemprop="iframe" src="foo.html"/>
+	<img itemprop="img" src="foo.jpg" alt=""/>
+	<link itemprop="link" href="foo.html"/>
+	<object itemprop="object" data="foo.jpg"/>
+	<source itemprop="source" src="foo"/>
+	<track itemprop="track" src="foo"/>
+	<video itemprop="video" src="foo.ogm"/>
+</section>
+
+</body>
+</html>
+--- expected
+{
+	"items" : [
+		{
+			"properties" : {
+				"empty"  : [ "" ],
+				"a"  : [ "http://example.com/foo.html" ],
+				"area"  : [ "http://example.com/foo.html" ],
+				"audio"  : [ "http://example.com/foo.ogg" ],
+				"embed"  : [ "http://example.com/foo.dat" ],
+				"iframe"  : [ "http://example.com/foo.html" ],
+				"img"  : [ "http://example.com/foo.jpg" ],
+				"link"  : [ "http://example.com/foo.html" ],
+				"object"  : [ "http://example.com/foo.jpg" ],
+				"source"  : [ "http://example.com/foo" ],
+				"track"  : [ "http://example.com/foo" ],
+				"video"  : [ "http://example.com/foo.ogm" ]
+			}
+		}
+	]
+}
+
+=== infinate loop
+--- input
+<html>
+<body>
+
+<div id="foo" itemscope itemref="bar">
+	<meta itemprop="foo" content="bar"/>
+</div>
+
+<div id="bar" itemprop="unko" itemscope itemref="foo">
+	<meta itemprop="baz" content="bar"/>
+</div>
+
+</body>
+</html>
+--- expected
+{
+	"items" : [
+		{
+			"properties" : {
+				"foo" : [ "bar" ]
+			}
+		}
+	]
+}

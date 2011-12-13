@@ -1,27 +1,28 @@
-This is Perl module Text::Xatena.
+NAME
+    HTML::Microdata - Extractor of microdata from HTML.
 
-INSTALLATION
+SYNOPSIS
+      use HTML::Microdata;
 
-HTML::Microdata installation is straightforward. If your CPAN shell is set up,
-you should just be able to do
+      my $microdata = HTML::Microdata->extract(<<EOF);
+      my $json = $microdata->as_json;
 
-    % cpan HTML::Microdata
+      use Data::Dumper;
+      warn Dumper $microdata->items;
 
-Download it, unpack it, then build it as per the usual:
+DESCRIPTION
+    HTML::Microdata is extractor of microdata from HTML to JSON etc.
 
-    % perl Makefile.PL
-    % make && make test
+    HTML::HTML5::Microdata::Parser has too many dependency but I want more
+    small dependency and simple output.
 
-Then install it:
+AUTHOR
+    cho45 <cho45@lowreal.net>
 
-    % make install
+SEE ALSO
+    HTML::HTML5::Microdata::Parser
 
-DOCUMENTATION
+LICENSE
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 
-HTML::Microdata documentation is available as in POD. So you can do:
-
-    % perldoc HTML::Microdata
-
-to read the documentation online with your favorite pager.
-
-cho45

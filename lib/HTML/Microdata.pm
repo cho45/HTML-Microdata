@@ -7,19 +7,21 @@ use HTML::TreeBuilder::LibXML;
 use Hash::MultiValue;
 use Scalar::Util qw(refaddr);
 use JSON;
+use URI;
 
 our $VERSION = '0.01';
 
 sub new {
-	my ($class, $args) = @_;
+	my ($class, %args) = @_;
 	bless {
 		items => [],
+		base  => $args{base} ? URI->new($args{base}) : undef,
 	}, $class;
 }
 
 sub extract {
-	my ($class, $content, $opts) = @_;
-	my $self = $class->new($opts);
+	my ($class, $content, %opts) = @_;
+	my $self = $class->new(%opts);
 	$self->_parse($content);
 	$self
 }
@@ -98,6 +100,19 @@ sub _parse {
 
 }
 
+sub absolute {
+	my ($self, $uri) = @_;
+	if (defined $uri) {
+		if ($self->{base}) {
+			URI->new_abs($uri, $self->{base}).q();
+		} else {
+			$uri;
+		}
+	} else {
+		"";
+	}
+}
+
 sub extract_value {
 	my ($self, $prop, %opts) = @_;
 
@@ -107,12 +122,14 @@ sub extract_value {
 		$value = $opts{items}->{ $prop->id };
 	} elsif ($prop->tag eq 'meta') {
 		$value = $prop->attr('content');
-	} elsif ($prop->tag =~ m{^audio|embed|iframe|img|source|video$}) {
-		$value = $prop->attr('src');
+	} elsif ($prop->tag =~ m{^audio|embed|iframe|img|source|video|track$}) {
+		$value = $self->absolute($prop->attr('src'));
 	} elsif ($prop->tag =~ m{^a|area|link$}) {
-		$value = $prop->attr('href');
+		$value = $self->absolute($prop->attr('href'));
 	} elsif ($prop->tag eq 'object') {
-		$value = $prop->attr('data');
+		$value = $self->absolute($prop->attr('data'));
+	} elsif ($prop->tag eq 'data') {
+		$value = $prop->attr('value');
 	} elsif ($prop->tag eq 'time' && $prop->attr('datetime')) {
 		$value = $prop->attr('datetime');
 	} else {
@@ -129,22 +146,24 @@ __END__
 
 =head1 NAME
 
-HTML::Microdata - 
+HTML::Microdata - Extractor of microdata from HTML.
 
 =head1 SYNOPSIS
 
   use HTML::Microdata;
 
-  my $microdata = HTML::Microdata->extract(<<EOF);
+  my $microdata = HTML::Microdata->extract(<<EOF, base => 'http://example.com/');
+  ...
+  EOF
   my $json = $microdata->as_json;
 
   use Data::Dumper;
-  warn Dumper $microdata->items;
+  warn Dumper $microdata->items; # returns top level items
 
 
 =head1 DESCRIPTION
 
-HTML::Microdata is 
+HTML::Microdata is extractor of microdata from HTML to JSON etc.
 
 HTML::HTML5::Microdata::Parser has too many dependency but I want more small dependency and simple output.
 
