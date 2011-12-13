@@ -33,7 +33,7 @@ __END__
 <html>
 <body>
 <div itemscope>
-	<span itemprop="foo">bar</span>
+	<span itemprop="foo bar">bar</span>
 </div>
 </body>
 </html>
@@ -42,7 +42,8 @@ __END__
 	"items" : [
 		{
 			"properties" : {
-				"foo" : [ "bar" ]
+				"foo" : [ "bar" ],
+				"bar" : [ "bar" ]
 			}
 		}
 	]
@@ -245,6 +246,7 @@ http://example.com/
 }
 
 === infinate loop
+--- SKIP
 --- input
 <html>
 <body>

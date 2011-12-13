@@ -85,12 +85,11 @@ sub _parse {
 
 	my $props = $tree->findnodes('//*[@itemprop]');
 	for my $prop (@$props) {
-		my $name = $prop->attr('itemprop');
 		my $value = $self->extract_value($prop, items => $items);
-
 		my $scope = $prop->findnodes('./ancestor::*[@itemscope]')->[-1];
-
-		$items->{ $scope->id }->{properties}->add($name => $value);
+		for my $name (split /\s+/, $prop->attr('itemprop')) {
+			$items->{ $scope->id }->{properties}->add($name => $value);
+		}
 	}
 
 	for my $key (keys %$items) {
@@ -165,7 +164,15 @@ HTML::Microdata - Extractor of microdata from HTML.
 
 HTML::Microdata is extractor of microdata from HTML to JSON etc.
 
-HTML::HTML5::Microdata::Parser has too many dependency but I want more small dependency and simple output.
+Implementation of http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.html#microdata .
+
+=head1 TODO
+
+itemref implementation has not been completed.
+
+=head1 WHY
+
+There already is HTML::HTML5::Microdata::Parser in CPAN. But it has very heavy dependency and I can't install it. And more, package name should not include "HTML5" because HTML5 is just HTML now.
 
 =head1 AUTHOR
 
