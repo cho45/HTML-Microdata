@@ -64,7 +64,7 @@ sub _parse {
 
 		unless ($scope->attr('itemprop')) {
 			# This is top level item
-			push $self->{items}, $item;
+			push @{ $self->{items} }, $item;
 		}
 	}
 
