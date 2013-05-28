@@ -271,3 +271,15 @@ http://example.com/
 		}
 	]
 }
+
+=== error
+--- input
+<html>
+<meta itemprop="name" content="foobar"/>
+<body>
+</body>
+</html>
+--- expected
+{
+	"items" : []
+}
