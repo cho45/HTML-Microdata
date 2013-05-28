@@ -1,3 +1,8 @@
+2013-05-28  SATOH Hiroh <cho45@lowreal.net>
+
+	* 0.03:
+	Fix error on invalid itemprop. (reported by Lucas Mateus)
+
 2011-12-14  SATOH Hiroh <cho45@lowreal.net>
 
 	* 0.02:
