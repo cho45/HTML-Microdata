@@ -28,6 +28,8 @@ requires 'URI';
 requires 'HTML::TreeBuilder::LibXML';
 
 build_requires 'Test::More';
+test_requires 'Test::Differences';
+test_requires 'JSON::XS';
 
 # Module::Install::AuthorTests
 author_tests('xt');
