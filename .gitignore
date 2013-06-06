@@ -14,3 +14,10 @@ MYMETA.yml
 MYMETA.json
 Debian_CPANTS.txt*
 *.bak
+/HTML-Microdata-*
+/.build
+/_build_params
+/Build
+!Build/
+!META.json
+!LICENSE
