@@ -7,7 +7,7 @@ use HTML::Microdata;
 use Test::More;
 use Test::Base;
 use Test::Differences;
-use JSON::XS;
+use JSON;
 
 plan tests => 1 * blocks;
 

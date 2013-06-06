@@ -1,3 +1,7 @@
+{{$NEXT}}
+
+	- Fix dependency. 
+
 2013-05-28  SATOH Hiroh <cho45@lowreal.net>
 
 	* 0.03:

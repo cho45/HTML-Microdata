@@ -28,7 +28,7 @@
       "build" : {
          "requires" : {
             "ExtUtils::MakeMaker" : "6.36",
-            "JSON::XS" : "0",
+            "JSON" : "0",
             "Test::Differences" : "0",
             "Test::More" : "0"
          }

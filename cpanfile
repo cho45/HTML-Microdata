@@ -6,7 +6,7 @@ requires 'URI';
 
 on build => sub {
     requires 'ExtUtils::MakeMaker', '6.36';
-    requires 'JSON::XS';
+    requires 'JSON';
     requires 'Test::Differences';
     requires 'Test::More';
 };
