@@ -131,6 +131,8 @@ sub extract_value {
 		$value = $prop->attr('value');
 	} elsif ($prop->tag eq 'time' && $prop->attr('datetime')) {
 		$value = $prop->attr('datetime');
+	} elsif (defined $prop->attr('content')) {
+		$value = $prop->attr('content');
 	} else {
 		$value = $prop->findvalue('normalize-space(.)');
 	}
