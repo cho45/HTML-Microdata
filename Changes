@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+0.05 2016-01-26T00:13:21Z
+
+	- Use content attribute as value of property, if it is available, instead
+	of the annotated text. (by Václav Haisman)
+
 0.04 2013-06-06T06:15:01Z
 
 	- Fix dependency. 

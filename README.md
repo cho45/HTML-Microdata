@@ -14,13 +14,11 @@ HTML::Microdata - Extractor of microdata from HTML.
     use Data::Dumper;
     warn Dumper $microdata->items; # returns top level items
 
-
-
 # DESCRIPTION
 
 HTML::Microdata is extractor of microdata from HTML to JSON etc.
 
-Implementation of http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.html\#microdata .
+Implementation of http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.html#microdata .
 
 # TODO
 
@@ -36,7 +34,7 @@ cho45 <cho45@lowreal.net>
 
 # SEE ALSO
 
-[HTML::HTML5::Microdata::Parser](http://search.cpan.org/perldoc?HTML::HTML5::Microdata::Parser)
+[HTML::HTML5::Microdata::Parser](https://metacpan.org/pod/HTML::HTML5::Microdata::Parser)
 
 # LICENSE
 
