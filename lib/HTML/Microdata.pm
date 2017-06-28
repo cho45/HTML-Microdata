@@ -38,6 +38,12 @@ sub items {
 	$self->{items};
 }
 
+sub _split_tokens {
+	my ($str) = @_;
+	$str =~ s/^\s+|\s+$//g;
+	return split /\s+/, $str;
+}
+
 sub _parse {
 	my ($self, $content) = @_;
 
@@ -70,13 +76,14 @@ sub _parse {
 
 	for my $scope (@$scopes) {
 		if (my $refs = $scope->attr('itemref')) {
-			my $ids = [ split /\s+/, $refs ];
+			my $ids = [ _split_tokens($refs) ];
 			for my $id (@$ids) {
 				my $props = $tree->findnodes('//*[@id="' . $id . '"]/descendant-or-self::*[@itemprop]');
 				for my $prop (@$props) {
-					my $name = $prop->attr('itemprop');
 					my $value = $self->extract_value($prop, items => $items);
-					$items->{ $scope->id }->{properties}->add($name => $value);
+					foreach my $name (_split_tokens($prop->attr('itemprop'))) {
+						$items->{ $scope->id }->{properties}->add($name => $value);
+					}
 					$prop->delete;
 				}
 			}
@@ -87,7 +94,7 @@ sub _parse {
 	for my $prop (@$props) {
 		my $value = $self->extract_value($prop, items => $items);
 		my $scope = $prop->findnodes('./ancestor::*[@itemscope]')->[-1];
-		for my $name (split /\s+/, $prop->attr('itemprop')) {
+		for my $name (_split_tokens($prop->attr('itemprop'))) {
 			$items->{ $scope->id }->{properties}->add($name => $value);
 		}
 	}
