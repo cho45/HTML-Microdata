@@ -121,9 +121,9 @@ sub extract_value {
 		$value = $opts{items}->{ $prop->id };
 	} elsif ($prop->tag eq 'meta') {
 		$value = $prop->attr('content');
-	} elsif ($prop->tag =~ m{^audio|embed|iframe|img|source|video|track$}) {
+	} elsif ($prop->tag =~ m{^(?:audio|embed|iframe|img|source|video|track)$}) {
 		$value = $self->absolute($prop->attr('src'));
-	} elsif ($prop->tag =~ m{^a|area|link$}) {
+	} elsif ($prop->tag =~ m{^(?:a|area|link)$}) {
 		$value = $self->absolute($prop->attr('href'));
 	} elsif ($prop->tag eq 'object') {
 		$value = $self->absolute($prop->attr('data'));
