@@ -62,7 +62,7 @@ sub _parse {
 
 		$items->{ $scope->id } = $item;
 
-		unless ($scope->attr('itemprop')) {
+		unless (scalar @{$scope->findnodes('./ancestor::*[@itemscope]')}) {
 			# This is top level item
 			push @{ $self->{items} }, $item;
 		}
@@ -87,6 +87,7 @@ sub _parse {
 	for my $prop (@$props) {
 		my $value = $self->extract_value($prop, items => $items);
 		my $scope = $prop->findnodes('./ancestor::*[@itemscope]')->[-1];
+		next if ! defined $scope;
 		for my $name (split /\s+/, $prop->attr('itemprop')) {
 			$items->{ $scope->id }->{properties}->add($name => $value);
 		}
