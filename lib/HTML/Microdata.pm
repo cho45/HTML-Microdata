@@ -62,7 +62,8 @@ sub _parse {
 
 		$items->{ $scope->id } = $item;
 
-		unless (scalar @{$scope->findnodes('./ancestor::*[@itemscope]')}) {
+		if (!scalar @{$scope->findnodes('./ancestor::*[@itemscope]')}
+			|| !$scope->attr('itemprop')) {
 			# This is top level item
 			push @{ $self->{items} }, $item;
 		}
